@@ -1,55 +1,28 @@
 import 'dart:io';
+import 'models/person.dart';
+import 'models/vehicle.dart';
+import 'models/parkingSpace.dart';
+import 'models/parking.dart';
 
-class Person {
-  String name;
-  int personnummer;
-  Person({required this.name, required this.personnummer});
+class PersonRepository {
+  List<Person> personer = [];
 
-  @override
-  String toString() {
-    return 'Namn: $name, Personnummer: $personnummer';
+  void addPerson(Person person) {
+    personer.add(person);
   }
-}
 
-class Vehicle {
-  int registreringsnummer;
-  String typAvFordon;
-  Person owner;
-  Vehicle(
-      {required this.owner,
-      required this.registreringsnummer,
-      required this.typAvFordon});
-
-  @override
-  String toString() {
-    return 'Ägare: $owner, Registreringsnummer: $registreringsnummer, Fordonstyp: $typAvFordon';
+  void removePerson(int index) {
+    personer.removeAt(index);
   }
-}
 
-class ParkingSpace {
-  int id;
-  String adress;
-  int perHour;
-  ParkingSpace({required this.adress, required this.id, required this.perHour});
-}
-
-class Parking {
-  Vehicle fordon;
-  ParkingSpace parkeringsplats;
-  DateTime startTime;
-  DateTime? endTime;
-  Parking(
-      {required this.startTime,
-      required this.fordon,
-      required this.parkeringsplats,
-      this.endTime});
+  List<Person> getAll() {
+    return personer;
+  }
 }
 
 List<Person> personer = [];
 
 void main() {
-  List<Person> personer = [];
-
   bool mainMenuActive = true;
 
   while (mainMenuActive) {
@@ -70,8 +43,9 @@ void main() {
         while (personMenuActive) {
           stdout.writeln("1. Lägg till");
           stdout.writeln("2. Ta bort");
-          stdout.writeln("3. Se info");
-          stdout.writeln("4. Tillbaka");
+          stdout.writeln('3. Uppdatera anvandare');
+          stdout.writeln("4. Se personer");
+          stdout.writeln("5. Tillbaka");
 
           final personVal = stdin.readLineSync();
 
@@ -114,7 +88,12 @@ void main() {
               personer.removeAt(index! - 1);
               stdout.writeln('Du har tagit bort personen');
               break;
+
             case '3':
+              print('Under uppbyggnad');
+              break;
+
+            case '4':
               stdout.writeln("Registrerade personer:");
               if (personer.isEmpty) {
                 stdout.writeln("Inga personer registrerade ännu.");
@@ -125,7 +104,7 @@ void main() {
               }
               break;
 
-            case '4':
+            case '5':
               personMenuActive = false;
               break;
 
