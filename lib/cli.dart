@@ -3,6 +3,10 @@ import 'models/person.dart';
 import 'models/vehicle.dart';
 import 'models/parkingSpace.dart';
 import 'models/parking.dart';
+import 'models/personRepo.dart';
+import 'models/parkingRepo.dart';
+import 'models/parkingSpaceRepo.dart';
+import 'models/vehicleRepo.dart';
 
 class PersonRepository {
   List<Person> personer = [];
@@ -23,6 +27,10 @@ class PersonRepository {
 List<Person> personer = [];
 
 void main() {
+  final personRepository = PersonRepository();
+  final vehicleRepository = VehicleRepository();
+  final parkingSpaceRepository = ParkingSpaceRepository();
+  final parkingRepository = ParkingRepository();
   bool mainMenuActive = true;
 
   while (mainMenuActive) {
