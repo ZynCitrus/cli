@@ -8,22 +8,6 @@ import 'models/parkingRepo.dart';
 import 'models/parkingSpaceRepo.dart';
 import 'models/vehicleRepo.dart';
 
-class PersonRepository {
-  List<Person> personer = [];
-
-  void addPerson(Person person) {
-    personer.add(person);
-  }
-
-  void removePerson(int index) {
-    personer.removeAt(index);
-  }
-
-  List<Person> getAll() {
-    return personer;
-  }
-}
-
 List<Person> personer = [];
 
 void main() {
@@ -70,7 +54,7 @@ void main() {
                 if (personnummer != null) {
                   Person newPerson =
                       Person(name: name, personnummer: personnummer);
-                  personer.add(newPerson);
+                  personRepository.add(newPerson);
                   stdout.writeln("Ny person skapad: $newPerson");
                 } else {
                   stdout.writeln("Ogiltigt personnummer.");
@@ -80,33 +64,41 @@ void main() {
               }
               break;
             case '2':
+              final allPersons = personRepository.getAll();
+
               stdout.writeln('Vilken person vill du ta bort?');
               stdout.writeln("Registrerade personer:");
-              if (personer.isEmpty) {
+              if (allPersons.isEmpty) {
                 stdout.writeln("Inga personer registrerade ännu.");
               } else {
-                for (var i = 0; i < personer.length; i++) {
-                  print('${i + 1}: ${personer[i]}');
+                for (var i = 0; i < allPersons.length; i++) {
+                  print('${i + 1}: ${allPersons[i]}}');
                 }
               }
               stdout.writeln('Välj person att ta bort');
               final input = stdin.readLineSync();
               final index = int.tryParse(input!);
 
-              personer.removeAt(index! - 1);
-              stdout.writeln('Du har tagit bort personen');
+              if (index != null &&
+                  index > 0 &&
+                  index <= personRepository.getAll().length) {
+                personRepository.delete(index - 1);
+                stdout.writeln('Du har tagit bort personen');
+              } else {
+                stdout.writeln('Ogiltigt val.');
+              }
               break;
-
             case '3':
               print('Under uppbyggnad');
               break;
 
             case '4':
+              final allPersons = personRepository.getAll();
               stdout.writeln("Registrerade personer:");
-              if (personer.isEmpty) {
+              if (allPersons.isEmpty) {
                 stdout.writeln("Inga personer registrerade ännu.");
               } else {
-                for (var person in personer) {
+                for (var person in allPersons) {
                   stdout.writeln(person);
                 }
               }
