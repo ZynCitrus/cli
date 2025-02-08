@@ -8,8 +8,6 @@ import 'models/parkingRepo.dart';
 import 'models/parkingSpaceRepo.dart';
 import 'models/vehicleRepo.dart';
 
-List<Person> personer = [];
-
 void main() {
   final personRepository = PersonRepository();
   final vehicleRepository = VehicleRepository();
@@ -29,7 +27,7 @@ void main() {
     final input = stdin.readLineSync();
 
     switch (input) {
-      case '1':
+      case '1': // Personmeny
         bool personMenuActive = true;
 
         while (personMenuActive) {
@@ -42,7 +40,8 @@ void main() {
           final personVal = stdin.readLineSync();
 
           switch (personVal) {
-            case '1':
+            case '1': // Lägg till ny person
+              stdout.writeln('Lägg till ny person');
               stdout.writeln('Ange namn:');
               String? name = stdin.readLineSync();
 
@@ -63,7 +62,7 @@ void main() {
                 stdout.writeln("Felaktig inmatning.");
               }
               break;
-            case '2':
+            case '2': // Ta bort person
               final allPersons = personRepository.getAll();
 
               stdout.writeln('Vilken person vill du ta bort?');
@@ -72,7 +71,7 @@ void main() {
                 stdout.writeln("Inga personer registrerade ännu.");
               } else {
                 for (var i = 0; i < allPersons.length; i++) {
-                  print('${i + 1}: ${allPersons[i]}}');
+                  print('${i + 1}: ${allPersons[i]}');
                 }
               }
               stdout.writeln('Välj person att ta bort');
@@ -88,15 +87,15 @@ void main() {
                 stdout.writeln('Ogiltigt val.');
               }
               break;
-            case '3':
+            case '3': // Uppdatera person
               stdout.writeln('Vilken person vill du uppdatera?');
               final allPersons = personRepository.getAll();
               stdout.writeln("Registrerade personer:");
               if (allPersons.isEmpty) {
                 stdout.writeln("Inga personer registrerade ännu.");
               } else {
-                for (var person in allPersons) {
-                  stdout.writeln(person);
+                for (var i = 0; i < allPersons.length; i++) {
+                  print('${i + 1}: ${allPersons[i]}}');
                 }
               }
               stdout.writeln('Välj en person att uppdatera');
@@ -140,20 +139,18 @@ void main() {
                 }
               }
               break;
-
-            case '4':
+            case '4': // Se personer
               final allPersons = personRepository.getAll();
               stdout.writeln("Registrerade personer:");
               if (allPersons.isEmpty) {
                 stdout.writeln("Inga personer registrerade ännu.");
               } else {
-                for (var person in allPersons) {
-                  stdout.writeln(person);
+                for (var i = 0; i < allPersons.length; i++) {
+                  print('${i + 1}: ${allPersons[i]}');
                 }
               }
               break;
-
-            case '5':
+            case '5': // Tillbaka
               personMenuActive = false;
               break;
 
@@ -162,7 +159,7 @@ void main() {
           }
         }
         break;
-      case '2':
+      case '2': // Fordonsmeny
         bool carMenuActive = true;
 
         while (carMenuActive) {
@@ -175,35 +172,67 @@ void main() {
           final carVal = stdin.readLineSync();
 
           switch (carVal) {
-            case '5':
+            case '1': // Lägg till fordon
+              stdout.writeln('Lägga till fordon');
+              break;
+            case '2': // Ta bort fordon
+              stdout.writeln('Ta bort fordon');
+              break;
+            case '3': // Uppdatera fordon
+              stdout.writeln('Uppdatera fordon');
+              break;
+            case '4': // Se fordon
+              stdout.writeln('Se registrerade fordon');
+              break;
+            case '5': // Avsluta
               carMenuActive = false;
               break;
           }
         }
-      case '3':
-        bool parkingspotMenuActive = true;
+      case '3': // Parkeringsplatsmeny
+        bool parkingspaceMenuActive = true;
 
-        while (parkingspotMenuActive) {
+        while (parkingspaceMenuActive) {
           stdout.writeln("1. Lägg till");
           stdout.writeln("2. Ta bort");
           stdout.writeln('3. Uppdatera parkeringsplats');
           stdout.writeln("4. Se parkeringsplats");
           stdout.writeln("5. Tillbaka");
 
-          final parkingspotVal = stdin.readLineSync();
+          final parkingspaceVal = stdin.readLineSync();
 
-          switch (parkingspotVal) {
-            case '5':
-              parkingspotMenuActive = false;
+          switch (parkingspaceVal) {
+            case '1': // Lägg till parkeringsplats
+              stdout.writeln('Lägga till parkeringsplats');
+              break;
+            case '2': // Ta bort parkeringsplats
+              stdout.writeln('Ta bort parkeringsplats');
+              break;
+            case '3': // Uppdatera parkeringsplats
+              stdout.writeln('Uppdatera parkeringsplats');
+              break;
+            case '4': // Se parkeringsplatser
+              final allParkingspots = parkingSpaceRepository.getAll();
+              stdout.writeln("Registrerade parkeringsplatser:");
+              if (allParkingspots.isEmpty) {
+                stdout.writeln("Inga parkeringsplatser registrerade ännu.");
+              } else {
+                for (var i = 0; i < allParkingspots.length; i++) {
+                  print('${i + 1}: ${allParkingspots[i]}');
+                }
+              }
+              break;
+            case '5': // Avsluta
+              parkingspaceMenuActive = false;
               break;
           }
         }
-      case '4':
+      case '4': // Parkeringsmeny
         bool parkingMenuActive = true;
 
         while (parkingMenuActive) {
-          stdout.writeln("1. Lägg till");
-          stdout.writeln("2. Ta bort");
+          stdout.writeln("1. Lägg till parkering");
+          stdout.writeln("2. Ta bort parkering");
           stdout.writeln('3. Uppdatera parkering');
           stdout.writeln("4. Se parkering");
           stdout.writeln("5. Tillbaka");
@@ -211,12 +240,24 @@ void main() {
           final parkingVal = stdin.readLineSync();
 
           switch (parkingVal) {
-            case '5':
+            case '1': // Lägg till parkering
+              stdout.writeln('Lägga till parkering');
+              break;
+            case '2': // Ta bort parkering
+              stdout.writeln('Ta bort parkering');
+              break;
+            case '3': // Uppdatera parkering
+              stdout.writeln('Uppdatera parkering');
+              break;
+            case '4': // Se parkeringar
+              stdout.writeln('Se registrerade parkering');
+              break;
+            case '5': // avsluta
               parkingMenuActive = false;
               break;
           }
         }
-      case '5':
+      case '5': // Avsluta
         mainMenuActive = false;
         stdout.writeln("Avslutar programmet.");
         break;

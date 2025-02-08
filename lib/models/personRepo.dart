@@ -1,7 +1,28 @@
 import 'person.dart';
 
 class PersonRepository {
-  List<Person> personer = [];
+  List<Person> personer = [
+    Person(
+      name: 'Erik',
+      personnummer: 198902322332,
+    ),
+    Person(
+      name: 'Anna',
+      personnummer: 199001011234,
+    ),
+    Person(
+      name: 'Lars',
+      personnummer: 197505055555,
+    ),
+    Person(
+      name: 'Maria',
+      personnummer: 199203234444,
+    ),
+    Person(
+      name: 'Johan',
+      personnummer: 198707071212,
+    ),
+  ];
 
   void add(Person person) {
     personer.add(person);

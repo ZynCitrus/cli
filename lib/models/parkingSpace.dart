@@ -6,6 +6,6 @@ class ParkingSpace {
 
   @override
   String toString() {
-    return 'id: $id, Adress: $adress, kostnad per timme: $perHour';
+    return 'Adress: $adress, Kostnad per timme: $perHour per timme';
   }
 }

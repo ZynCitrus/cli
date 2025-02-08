@@ -1,0 +1,55 @@
+{
+"parkingSpaces": [
+    {
+    "id": 1,
+    "adress": "123 Main Street, Downtown",
+    "perHour": 25
+    },
+    {
+    "id": 2,
+    "adress": "456 Park Avenue, Financial District",
+    "perHour": 30
+    },
+    {
+    "id": 3,
+    "adress": "789 Residential Lane, Suburbs",
+    "perHour": 5
+    },
+    {
+    "id": 4,
+    "adress": "321 Market Street, Shopping Center",
+    "perHour": 15
+    },
+    {
+    "id": 5,
+    "adress": "654 University Way, Campus Area",
+    "perHour": 8
+    },
+    {
+    "id": 6,
+    "adress": "987 Theater District, Entertainment Zone",
+    "perHour": 20
+    },
+    {
+    "id": 7,
+    "adress": "246 Hospital Drive, Medical Center",
+    "perHour": 12
+    },
+    {
+    "id": 8,
+    "adress": "135 Restaurant Row, Dining District",
+    "perHour": 18
+    },
+    {
+    "id": 9,
+    "adress": "802 Stadium Boulevard, Sports Complex",
+    "perHour": 22
+    },
+    {
+    "id": 10,
+    "adress": "573 Beach Road, Waterfront",
+    "perHour": 10
+    }
+]
+}
+
