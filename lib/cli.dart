@@ -163,14 +163,59 @@ void main() {
         }
         break;
       case '2':
-        stdout.writeln('Fordon');
-        break;
+        bool carMenuActive = true;
+
+        while (carMenuActive) {
+          stdout.writeln("1. Lägg till");
+          stdout.writeln("2. Ta bort");
+          stdout.writeln('3. Uppdatera fordon');
+          stdout.writeln("4. Se fordon");
+          stdout.writeln("5. Tillbaka");
+
+          final carVal = stdin.readLineSync();
+
+          switch (carVal) {
+            case '5':
+              carMenuActive = false;
+              break;
+          }
+        }
       case '3':
-        stdout.writeln('Parkeringsplatser');
-        break;
+        bool parkingspotMenuActive = true;
+
+        while (parkingspotMenuActive) {
+          stdout.writeln("1. Lägg till");
+          stdout.writeln("2. Ta bort");
+          stdout.writeln('3. Uppdatera parkeringsplats');
+          stdout.writeln("4. Se parkeringsplats");
+          stdout.writeln("5. Tillbaka");
+
+          final parkingspotVal = stdin.readLineSync();
+
+          switch (parkingspotVal) {
+            case '5':
+              parkingspotMenuActive = false;
+              break;
+          }
+        }
       case '4':
-        stdout.writeln('Parkeringar');
-        break;
+        bool parkingMenuActive = true;
+
+        while (parkingMenuActive) {
+          stdout.writeln("1. Lägg till");
+          stdout.writeln("2. Ta bort");
+          stdout.writeln('3. Uppdatera parkering');
+          stdout.writeln("4. Se parkering");
+          stdout.writeln("5. Tillbaka");
+
+          final parkingVal = stdin.readLineSync();
+
+          switch (parkingVal) {
+            case '5':
+              parkingMenuActive = false;
+              break;
+          }
+        }
       case '5':
         mainMenuActive = false;
         stdout.writeln("Avslutar programmet.");
