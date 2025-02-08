@@ -162,7 +162,15 @@ void main() {
           }
         }
         break;
-
+      case '2':
+        stdout.writeln('Fordon');
+        break;
+      case '3':
+        stdout.writeln('Parkeringsplatser');
+        break;
+      case '4':
+        stdout.writeln('Parkeringar');
+        break;
       case '5':
         mainMenuActive = false;
         stdout.writeln("Avslutar programmet.");
