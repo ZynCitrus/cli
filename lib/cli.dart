@@ -89,7 +89,56 @@ void main() {
               }
               break;
             case '3':
-              print('Under uppbyggnad');
+              stdout.writeln('Vilken person vill du uppdatera?');
+              final allPersons = personRepository.getAll();
+              stdout.writeln("Registrerade personer:");
+              if (allPersons.isEmpty) {
+                stdout.writeln("Inga personer registrerade ännu.");
+              } else {
+                for (var person in allPersons) {
+                  stdout.writeln(person);
+                }
+              }
+              stdout.writeln('Välj en person att uppdatera');
+              final input = stdin.readLineSync();
+              final index = int.tryParse(input!);
+              if (index != null &&
+                  index > 0 &&
+                  index <= personRepository.getAll().length) {
+                stdout.writeln(
+                    'Ange nytt namn eller enter för att behålla befintligt:');
+                String? newName = stdin.readLineSync();
+                stdout.writeln(
+                    'Ange nytt personnummer eller enter för att behålla befintligt:');
+                String? newPersonnummerInput = stdin.readLineSync();
+
+                Person existingPerson = allPersons[index - 1];
+
+                String? updatedName =
+                    newName?.isNotEmpty == true ? newName : existingPerson.name;
+                int updatedPersonnummer;
+
+                if (newPersonnummerInput?.isNotEmpty == true) {
+                  int? parsedPersonnummer = int.tryParse(newPersonnummerInput!);
+                  if (parsedPersonnummer != null) {
+                    updatedPersonnummer = parsedPersonnummer;
+                  } else {
+                    stdout.writeln(
+                        "Ogiltigt personnummer. Behåller befintligt personnummer.");
+                    updatedPersonnummer = existingPerson.personnummer;
+                  }
+                } else {
+                  updatedPersonnummer = existingPerson.personnummer;
+                }
+                if (updatedName != null) {
+                  Person updatedPerson = Person(
+                      name: updatedName, personnummer: updatedPersonnummer);
+                  personRepository.update(index - 1, updatedPerson);
+                  stdout.writeln('Person uppdaterad: $updatedPerson');
+                } else {
+                  stdout.writeln('Ogiltigt val.');
+                }
+              }
               break;
 
             case '4':

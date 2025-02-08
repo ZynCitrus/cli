@@ -11,6 +11,12 @@ class PersonRepository {
     return personer;
   }
 
+  void update(int index, Person newPerson) {
+    if (index >= 0 && index < personer.length) {
+      personer[index] = newPerson;
+    }
+  }
+
   void delete(int index) {
     if (index >= 0 && index < personer.length) {
       personer.removeAt(index);
