@@ -203,13 +203,104 @@ void main() {
 
           switch (parkingspaceVal) {
             case '1': // Lägg till parkeringsplats
-              stdout.writeln('Lägga till parkeringsplats');
+              stdout.writeln('Lägg till parkeringsplats:');
+              stdout.writeln('Mata in ID:');
+              String? idInput = stdin.readLineSync();
+              stdout.writeln('Mata in Adress:');
+              String? adress = stdin.readLineSync();
+              stdout.writeln('Mata in kostnad per timme:');
+              String? perHourInput = stdin.readLineSync();
+
+              if (idInput != null && adress != null && perHourInput != null) {
+                int? id = int.tryParse(idInput);
+                int? perHour = int.tryParse(perHourInput);
+
+                if (id != null && perHour != null) {
+                  ParkingSpace newParkingSpace =
+                      ParkingSpace(id: id, adress: adress, perHour: perHour);
+                  parkingSpaceRepository.addParkingSpace(newParkingSpace);
+                  stdout.writeln("Ny parkeringsplats skapad: $newParkingSpace");
+                } else {
+                  stdout.writeln(
+                      "Ogiltigt ID eller kostnad per timme. Ange heltal.");
+                }
+              }
               break;
             case '2': // Ta bort parkeringsplats
-              stdout.writeln('Ta bort parkeringsplats');
+              final allParkingspots = parkingSpaceRepository.getAll();
+              stdout.writeln('Ta bort parkeringsplats!');
+              stdout.writeln('Registrerade parkeringsplatser:');
+              if (allParkingspots.isEmpty) {
+                stdout.writeln('Finns inga registreringsplatser');
+                break;
+              } else {
+                for (var i = 0; i < allParkingspots.length; i++) {
+                  print('${i + 1} ${allParkingspots[i]}');
+                }
+              }
+              stdout.writeln('Välj en parkeringsplats att ta bort');
+              final input = stdin.readLineSync();
+              final index = int.tryParse(input!);
+
+              if (index != null &&
+                  index > 0 &&
+                  index <= parkingSpaceRepository.getAll().length) {
+                parkingSpaceRepository.removeParkingSpace(index - 1);
+                stdout.writeln('Du har tagit bort parkeringsplatsen');
+              } else {
+                stdout.writeln('Ogiltigt val');
+              }
               break;
             case '3': // Uppdatera parkeringsplats
               stdout.writeln('Uppdatera parkeringsplats');
+              final allParkingspots = parkingSpaceRepository.getAll();
+              stdout.writeln('Registrerade parkeringsplatser');
+              if (allParkingspots.isEmpty) {
+                stdout.writeln('Inga registrerade parkeringsplatser.');
+              } else {
+                for (var i = 0; i < allParkingspots.length; i++) {
+                  print('${i + 1}: ${allParkingspots[i]}');
+                }
+              }
+              stdout.writeln('Välj parkeringsplats att uppdatera:');
+              final input = stdin.readLineSync();
+              final index = int.tryParse(input!);
+              if (index != null &&
+                  index > 0 &&
+                  index <= parkingSpaceRepository.getAll().length) {
+                ParkingSpace existingSpace =
+                    parkingSpaceRepository.getAll()[index - 1];
+
+                stdout.writeln('Ange nytt Id eller enter för att behålla');
+                String? newId = stdin.readLineSync();
+                stdout.writeln('Ange ny adress eller enter för att behålla');
+                String? newAdress = stdin.readLineSync();
+                stdout.writeln('Ange nytt timpris eller enter för att behålla');
+                String? newPerHour = stdin.readLineSync();
+
+                int updatedId = newId?.isNotEmpty == true
+                    ? int.tryParse(newId!) ?? existingSpace.id
+                    : existingSpace.id;
+
+                String updatedAdress = newAdress?.isNotEmpty == true
+                    ? newAdress!
+                    : existingSpace.adress;
+
+                int updatedPerHour = newPerHour?.isNotEmpty == true
+                    ? int.tryParse(newPerHour!) ?? existingSpace.perHour
+                    : existingSpace.perHour;
+
+                ParkingSpace updatedSpace = ParkingSpace(
+                    id: updatedId,
+                    adress: updatedAdress,
+                    perHour: updatedPerHour);
+
+                parkingSpaceRepository.updateParkingSpace(
+                    index - 1, updatedSpace);
+                stdout.writeln('Parkeringsplats uppdaterad: $updatedSpace');
+              } else {
+                stdout.writeln('Ogiltigt index.');
+              }
               break;
             case '4': // Se parkeringsplatser
               final allParkingspots = parkingSpaceRepository.getAll();
@@ -221,6 +312,7 @@ void main() {
                   print('${i + 1}: ${allParkingspots[i]}');
                 }
               }
+
               break;
             case '5': // Avsluta
               parkingspaceMenuActive = false;

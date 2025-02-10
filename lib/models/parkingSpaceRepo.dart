@@ -25,6 +25,12 @@ class ParkingSpaceRepository {
     return parkingSpaces;
   }
 
+  void updateParkingSpace(int index, ParkingSpace updatedSpace) {
+    if (index >= 0 && index < parkingSpaces.length) {
+      parkingSpaces[index] = updatedSpace;
+    }
+  }
+
   ParkingSpace? getById(int id) {
     try {
       return parkingSpaces.firstWhere(
