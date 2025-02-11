@@ -1,4 +1,5 @@
 import 'person.dart';
+import 'dart:io';
 
 class PersonRepository {
   List<Person> personer = [
@@ -30,6 +31,18 @@ class PersonRepository {
 
   List<Person> getAll() {
     return personer;
+  }
+
+  void seeAllPersons() {
+    final allPersons = getAll();
+    stdout.writeln("Registrerade personer:");
+    if (allPersons.isEmpty) {
+      stdout.writeln("Inga personer registrerade ännu.");
+    } else {
+      for (var i = 0; i < allPersons.length; i++) {
+        print('${i + 1}: ${allPersons[i]}');
+      }
+    }
   }
 
   void update(int index, Person newPerson) {

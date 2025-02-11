@@ -140,15 +140,7 @@ void main() {
               }
               break;
             case '4': // Se personer
-              final allPersons = personRepository.getAll();
-              stdout.writeln("Registrerade personer:");
-              if (allPersons.isEmpty) {
-                stdout.writeln("Inga personer registrerade ännu.");
-              } else {
-                for (var i = 0; i < allPersons.length; i++) {
-                  print('${i + 1}: ${allPersons[i]}');
-                }
-              }
+              personRepository.seeAllPersons();
               break;
             case '5': // Tillbaka
               personMenuActive = false;
