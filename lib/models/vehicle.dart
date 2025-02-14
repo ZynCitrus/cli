@@ -1,7 +1,7 @@
 import './person.dart';
 
 class Vehicle {
-  int registreringsnummer;
+  String registreringsnummer;
   String typAvFordon;
   Person owner;
   Vehicle(

@@ -8,17 +8,19 @@ class ParkingRepository {
   }
 
   void removeParking(int index) {
-    parkings.removeAt(index);
+    if (index >= 0 && index < parkings.length) {
+      parkings.removeAt(index);
+    }
   }
 
   List<Parking> getAll() {
     return parkings;
   }
 
-  Parking? getById(int id) {
+  Parking? getByVehicleReg(String regNumber) {
     try {
       return parkings.firstWhere(
-        (parking) => parking.fordon.registreringsnummer == id,
+        (parking) => parking.fordon.registreringsnummer == regNumber,
       );
     } catch (e) {
       return null;
