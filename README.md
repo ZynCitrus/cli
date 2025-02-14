@@ -1,2 +1,3 @@
-A sample command-line application with an entrypoint in `bin/`, library code
-in `lib/`, and example unit test in `test/`.
+# First project on Hybridutveckling med Flutter @ Stockholms tekniska institut.
+
+## A simple CLI parking application.
