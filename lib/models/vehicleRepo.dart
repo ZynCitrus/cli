@@ -15,6 +15,12 @@ class VehicleRepository {
     return vehicles;
   }
 
+  void update(int index, Vehicle newVehicle) {
+    if (index >= 0 && index < vehicles.length) {
+      vehicles[index] = newVehicle;
+    }
+  }
+
   Vehicle? getByRegistrationNumber(String registrationNumber) {
     try {
       return vehicles.firstWhere(

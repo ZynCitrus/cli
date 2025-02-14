@@ -95,7 +95,7 @@ void main() {
                 stdout.writeln("Inga personer registrerade ännu.");
               } else {
                 for (var i = 0; i < allPersons.length; i++) {
-                  print('${i + 1}: ${allPersons[i]}}');
+                  print('${i + 1}: ${allPersons[i]}');
                 }
               }
               stdout.writeln('Välj en person att uppdatera');
@@ -165,16 +165,136 @@ void main() {
 
           switch (carVal) {
             case '1': // Lägg till fordon
-              stdout.writeln('Lägga till fordon');
+              stdout.writeln('Ange registreringsnummer');
+              String? regNr = stdin.readLineSync();
+
+              stdout.writeln('Fordonstyp (Bil, MC, etc.)');
+              String? typ = stdin.readLineSync();
+
+              final allPersons = personRepository.getAll();
+              if (allPersons.isEmpty) {
+                stdout
+                    .writeln('Inga regisrerade personer, registrera dig först');
+                break;
+              }
+
+              stdout.writeln('välj ägare från listan');
+              for (var i = 0; i < allPersons.length; i++) {
+                stdout.writeln(
+                    '${i + 1}: ${allPersons[i].name} (personnummer: ${allPersons[i].personnummer})');
+              }
+
+              stdout.writeln('Ange nummer for person');
+              String? ownerIndexInput = stdin.readLineSync();
+              int? ownerIndex = int.tryParse(ownerIndexInput ?? '');
+
+              if (regNr != null &&
+                  typ != null &&
+                  ownerIndex != null &&
+                  ownerIndex > 0 &&
+                  ownerIndex <= allPersons.length) {
+                Person owner = allPersons[ownerIndex - 1];
+                Vehicle newVehicle = Vehicle(
+                  registreringsnummer: regNr,
+                  typAvFordon: typ,
+                  owner: owner,
+                );
+
+                vehicleRepository.addVehicle(newVehicle);
+                stdout.writeln("Nytt fordon tillagt: $newVehicle");
+              } else {
+                stdout.writeln("Felaktig inmatning.");
+                break;
+              }
               break;
             case '2': // Ta bort fordon
-              stdout.writeln('Ta bort fordon');
+              final allVehicles = vehicleRepository.getAll();
+              stdout.writeln('Registrerade fordon:');
+              for (var i = 0; i < allVehicles.length; i++) {
+                print('${i + 1}: ${allVehicles[i]}');
+              }
+              stdout.writeln('Valj ett fordon att ta bort');
+              final input = stdin.readLineSync();
+              final index = int.tryParse(input!);
+
+              if (index != null && index > 0 && index <= allVehicles.length) {
+                vehicleRepository.removeVehicle(index - 1);
+                stdout.writeln('Fordon borttaget');
+              } else {
+                stdout.writeln('ogiltigt val');
+                break;
+              }
+
               break;
             case '3': // Uppdatera fordon
-              stdout.writeln('Uppdatera fordon');
+              stdout.writeln('Vilket fordon vill du uppdatera?');
+
+              final allVehicles = vehicleRepository.getAll();
+              stdout.writeln("Registrerade fordon:");
+              if (allVehicles.isEmpty) {
+                stdout.writeln("Inga fordon registrerade ännu.");
+                break;
+              }
+
+              for (var i = 0; i < allVehicles.length; i++) {
+                stdout.writeln('${i + 1}: ${allVehicles[i]}');
+              }
+
+              stdout.writeln('Välj ett fordon att uppdatera:');
+              final input = stdin.readLineSync();
+              final index = int.tryParse(input ?? '');
+
+              if (index != null && index > 0 && index <= allVehicles.length) {
+                Vehicle existingVehicle = allVehicles[index - 1];
+
+                String regNr = existingVehicle.registreringsnummer;
+                String typeOfVehicle = existingVehicle.typAvFordon;
+
+                stdout.writeln('Registreringsnummer: $regNr');
+
+                stdout.writeln('Fordonstyp: ${typeOfVehicle}:');
+
+                final allPersons = personRepository.getAll();
+                stdout
+                    .writeln('Nuvarande ägare: ${existingVehicle.owner.name}');
+                stdout.writeln(
+                    'Välj ny ägare från listan eller tryck Enter för att behålla befintlig ägare:');
+
+                for (var i = 0; i < allPersons.length; i++) {
+                  stdout.writeln(
+                      '${i + 1}: ${allPersons[i].name} (Personnummer: ${allPersons[i].personnummer})');
+                }
+
+                stdout.writeln("Ange nummer för ny ägare:");
+                String? newOwnerIndexInput = stdin.readLineSync();
+                int? newOwnerIndex = int.tryParse(newOwnerIndexInput ?? '');
+
+                Person newOwner = existingVehicle.owner;
+                if (newOwnerIndex != null &&
+                    newOwnerIndex > 0 &&
+                    newOwnerIndex <= allPersons.length) {
+                  newOwner = allPersons[newOwnerIndex - 1];
+                }
+
+                Vehicle updatedVehicle = Vehicle(
+                  registreringsnummer: regNr,
+                  typAvFordon: typeOfVehicle,
+                  owner: newOwner,
+                );
+
+                vehicleRepository.update(index - 1, updatedVehicle);
+                stdout.writeln('Fordon uppdaterat: $updatedVehicle');
+              } else {
+                stdout.writeln("Ogiltigt val.");
+              }
               break;
-            case '4': // Se fordon
-              stdout.writeln('Se registrerade fordon');
+            case '4': // Se alla fordon
+              final allVehicles = vehicleRepository.getAll();
+              if (allVehicles.isEmpty) {
+                stdout.writeln("Inga fordon registrerade.");
+              } else {
+                allVehicles.forEach((v) => stdout.writeln(v));
+              }
               break;
             case '5': // Avsluta
               carMenuActive = false;
