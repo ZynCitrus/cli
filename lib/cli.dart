@@ -8,7 +8,7 @@ import 'models/parkingRepo.dart';
 import 'models/parkingSpaceRepo.dart';
 import 'models/vehicleRepo.dart';
 
-void main() {
+void menu() {
   final personRepository = PersonRepository();
   final vehicleRepository = VehicleRepository();
   final parkingSpaceRepository = ParkingSpaceRepository();
@@ -252,7 +252,7 @@ void main() {
 
                 stdout.writeln('Registreringsnummer: $regNr');
 
-                stdout.writeln('Fordonstyp: ${typeOfVehicle}:');
+                stdout.writeln('Fordonstyp: $typeOfVehicle:');
 
                 final allPersons = personRepository.getAll();
                 stdout
@@ -293,7 +293,9 @@ void main() {
               if (allVehicles.isEmpty) {
                 stdout.writeln("Inga fordon registrerade.");
               } else {
-                allVehicles.forEach((v) => stdout.writeln(v));
+                for (var i = 0; i < allVehicles.length; i++) {
+                  stdout.writeln('${i + 1}: ${allVehicles[i]}');
+                }
               }
               break;
             case '5': // Avsluta
@@ -435,8 +437,8 @@ void main() {
         bool parkingMenuActive = true;
 
         while (parkingMenuActive) {
-          stdout.writeln("1. Lägg till parkering");
-          stdout.writeln("2. Ta bort parkering");
+          stdout.writeln("1. Starta parkering");
+          stdout.writeln("2. Avsluta parkering");
           stdout.writeln('3. Uppdatera parkering');
           stdout.writeln("4. Se parkering");
           stdout.writeln("5. Tillbaka");
@@ -445,16 +447,135 @@ void main() {
 
           switch (parkingVal) {
             case '1': // Lägg till parkering
-              stdout.writeln('Lägga till parkering');
+              stdout.writeln('Starta parkering');
+              final allVehicles = vehicleRepository.getAll();
+              if (allVehicles.isEmpty) {
+                stdout.writeln(
+                    'Finns inga fordon registrerade, lägg till ett fordon först.');
+              } else {
+                for (var i = 0; i < allVehicles.length; i++) {
+                  stdout.writeln('${i + 1}: ${allVehicles[i]}');
+                }
+                stdout.writeln(
+                    'Välj nummer för fordon du vill starta en parkering för:');
+                String? vehicleIndexInput = stdin.readLineSync();
+                int? vehicleIndex = int.tryParse(vehicleIndexInput ?? '');
+
+                if (vehicleIndex == null ||
+                    vehicleIndex < 1 ||
+                    vehicleIndex > allVehicles.length) {
+                  stdout.writeln('ogiltigt val');
+                  break;
+                }
+
+                Vehicle selectedVehicle = allVehicles[vehicleIndex - 1];
+
+                final allParkingSpaces = parkingSpaceRepository.getAll();
+                if (allParkingSpaces.isEmpty) {
+                  stdout.writeln(
+                      "Inga registrerade parkeringsplatser. Kontakta supporten");
+                  break;
+                }
+
+                stdout.writeln('välj en parkeringsplats:');
+                for (var i = 0; i < allParkingSpaces.length; i++) {
+                  stdout.writeln("${i + 1}: ${allParkingSpaces[i]}");
+                }
+
+                stdout.writeln("Ange numret för parkeringsplatsen:");
+                String? parkingIndexInput = stdin.readLineSync();
+                int? parkingIndex = int.tryParse(parkingIndexInput ?? '');
+
+                if (parkingIndex == null ||
+                    parkingIndex < 1 ||
+                    parkingIndex > allParkingSpaces.length) {
+                  stdout.writeln("Ogiltigt val av parkeringsplats.");
+                  break;
+                }
+
+                ParkingSpace selectedParkingSpace =
+                    allParkingSpaces[parkingIndex - 1];
+
+                Parking newParking = Parking(
+                  startTime: DateTime.now(),
+                  fordon: selectedVehicle,
+                  parkeringsplats: selectedParkingSpace,
+                );
+
+                parkingRepository.addParking(newParking);
+                stdout.writeln("Ny parkering skapad: $newParking");
+                stdout.writeln(
+                    "Antal parkeringar i repository: ${parkingRepository.getAll().length}");
+
+                break;
+              }
+
               break;
-            case '2': // Ta bort parkering
-              stdout.writeln('Ta bort parkering');
+            case '2': // Avsluta parkering
+              stdout.writeln('Avsluta parkering:');
+              stdout.writeln('Välj ditt fordon:');
+              final allVehicles = vehicleRepository.getAll();
+              if (allVehicles.isEmpty) {
+                stdout.writeln('Finns inga fordon, registrera ett först');
+              }
+              for (var i = 0; i < allVehicles.length; i++) {
+                stdout.writeln('${i + 1}: ${allVehicles[i]}');
+              }
+
+              stdout.writeln('Ange numret for ditt fordon');
+              String? vehicleIndexInput = stdin.readLineSync();
+              int? vehicleIndex = int.tryParse(vehicleIndexInput ?? '');
+              if (vehicleIndex == null ||
+                  vehicleIndex < 1 ||
+                  vehicleIndex > allVehicles.length) {
+                stdout.writeln("Ogiltigt val.");
+                break;
+              }
+              Vehicle selectedVehicle = allVehicles[vehicleIndex - 1];
+              final activeParkings = parkingRepository
+                  .getAll()
+                  .where((p) =>
+                      p.fordon.registreringsnummer ==
+                          selectedVehicle.registreringsnummer &&
+                      p.endTime == null)
+                  .toList();
+              if (activeParkings.isEmpty) {
+                stdout.writeln(
+                    "Det finns inga aktiva parkeringar för detta fordon.");
+                break;
+              }
+              stdout.writeln('välj en parkering att avsluta');
+              for (var i = 0; i < activeParkings.length; i++) {
+                stdout.writeln('${i + 1}: ${activeParkings[i]}');
+              }
+              stdout.writeln("Ange numret för parkeringen att avsluta:");
+              String? parkingIndexInput = stdin.readLineSync();
+              int? parkingIndex = int.tryParse(parkingIndexInput ?? '');
+              if (parkingIndex == null ||
+                  parkingIndex < 1 ||
+                  parkingIndex > activeParkings.length) {
+                stdout.writeln("Ogiltigt val.");
+                break;
+              }
+
+              activeParkings[parkingIndex - 1].endTime = DateTime.now();
+              stdout.writeln(
+                  "Parkeringen har avslutats: ${activeParkings[parkingIndex - 1]}");
               break;
             case '3': // Uppdatera parkering
-              stdout.writeln('Uppdatera parkering');
+              stdout.writeln('Inte implementerat ännu');
               break;
             case '4': // Se parkeringar
-              stdout.writeln('Se registrerade parkering');
+              stdout.writeln('Parkeringar:');
+              final allParkings = parkingRepository.getAll();
+              stdout.writeln("Registrerade parkeringar:");
+              if (allParkings.isEmpty) {
+                stdout.writeln("Inga parkeringar registrerade ännu.");
+              } else {
+                for (var i = 0; i < allParkings.length; i++) {
+                  print('${i + 1}: ${allParkings[i]}');
+                }
+              }
               break;
             case '5': // avsluta
               parkingMenuActive = false;
